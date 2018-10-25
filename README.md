@@ -5,9 +5,9 @@ Docker and script to generate video of periodic snapshots from Arlo cameras
 ```
 docker create \
   --name=arlo-lapse \
-    -v <path to config>:/script/cfg \
-    -v <path to snapshots>:/script/raw \
-    -v <path to lapse>:/script/lapse \
+    -v <path to config>:/app/cfg \
+    -v <path to snapshots>:/app/raw \
+    -v <path to lapse>:/app/lapse \
   empeee/arlo-lapse
 ```
 
