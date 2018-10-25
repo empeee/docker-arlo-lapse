@@ -1,2 +1,2 @@
-0 * * * * cd /script && /usr/local/bin/python arlo-lapse.py >> /var/log/cron.log 2>&1
+*/30 * * * * cd /app && python arlo-lapse.py
 #We need a blank line
