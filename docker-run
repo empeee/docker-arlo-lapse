@@ -1,1 +1,1 @@
-sudo docker run -d --rm --name arlogif -v /home/$USER/arloraw:/script/raw -v /home/$USER/arlogif:/script/gif -v /home/$USER/arlocfg:/script/cfg empeee/arlogif
+sudo docker run -d --rm --name arlo-lapse -v /home/$USER/arloraw:/script/raw -v /home/$USER/arlogif:/script/lapse -v /home/$USER/arlocfg:/script/cfg empeee/arlo-lapse

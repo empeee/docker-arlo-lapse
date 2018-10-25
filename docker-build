@@ -1,1 +1,1 @@
-sudo docker build -t empeee/arlogif:latest .
+sudo docker build -t empeee/arlo-lapse:latest .
