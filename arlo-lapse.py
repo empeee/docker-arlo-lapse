@@ -15,11 +15,11 @@ SNAPSHOT_PATH = './raw/'
 PURGE_DURATION_HOURS = 24
 LAPSE_DURATION = 10
 
-logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s', level=logging.INFO, filename='arlo-lapse.log')
 
 class ArloLapse:
     """
-    This is a class to generate animated GIFs of Arlo stills.
+    This is a class to generate videos of Arlo stills.
 
     Everything is pulled in through config.yaml which should
     live in the sub-directory cfg/
@@ -28,10 +28,10 @@ class ArloLapse:
         username (str): Arlo username
         password (str): Arlo password
         camera_names (list of strings): List of camera names to use
-        lapse_path (str): Path to resulting GIFs
+        lapse_path (str): Path to resulting videos
         snapshot_path (str): Path to raw snapshots
         purge_duration_hours (float): Time in hours to retain images
-        gif_frame_seconds (float): Frame duration in resulting GIF
+        laps_duration (float): Target duration of resulting video
     """
 
     def __init__(self):
@@ -205,4 +205,5 @@ if __name__ =='__main__':
     arlo_gif.get_snapshots()
     arlo_gif.purge_snapshots()
     arlo_gif.make_lapse()
+    logging.info('ArloLapse: Script complete.')
 
