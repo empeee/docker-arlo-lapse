@@ -192,7 +192,7 @@ class ArloLapse:
                 for file in files:
                     images.append(imageio.imread(file))
                 output_file = self.snapshot_path + camera_name + '.gif'
-                final_file = self.lapse_path + camera_name + 'gif'
+                final_file = self.lapse_path + camera_name + '.gif'
                 imageio.mimwrite(output_file, images, fps=fps)
 
                 command = 'gifsicle -O3 --colors 128 --resize-width 512 {} > {}'.format(output_file, final_file)
