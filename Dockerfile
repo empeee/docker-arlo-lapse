@@ -3,7 +3,7 @@ FROM python:3.6.6-slim-stretch
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     cron=3.0pl1-128+deb9u1 \
-    ffmpeg=7:3.2.12-1~deb9u1 \
+#    ffmpeg=7:3.2.12-1~deb9u1 \
     gifsicle=1.88-3+deb9u1 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
