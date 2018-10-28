@@ -15,7 +15,7 @@ SNAPSHOT_PATH = './raw/'
 PURGE_DURATION_HOURS = 24
 LAPSE_DURATION = 10
 
-logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s', level=logging.INFO, filename='arlo-lapse.log')
+logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s', level=logging.DEBUG) #, filename='arlo-lapse.log')
 
 class ArloLapse:
     """

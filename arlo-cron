@@ -1,2 +1,2 @@
-*/30 * * * * cd /app && python arlo-lapse.py
+*/30 * * * * cd /app && /usr/local/bin/python arlo-lapse.py >> /app/arlo-lapse.log 2>&1
 #We need a blank line
