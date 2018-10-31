@@ -13,7 +13,7 @@ CONFIG_PATH = './cfg/'
 LAPSE_PATH = './lapse/'
 SNAPSHOT_PATH = './raw/'
 PURGE_DURATION_HOURS = 24
-LAPSE_DURATION = 10
+LAPSE_DURATION = 20
 
 logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s', level=logging.DEBUG) #, filename='arlo-lapse.log')
 
@@ -55,40 +55,11 @@ class ArloLapse:
         else:
             raise ValueError('Cannot find password in config.yaml')
 
-        camera_names = cfg_yaml.get('camera_names')
-        if camera_names:
-            self.camera_names = camera_names
-            logging.debug('ArloLapse.__init__(): Found camera_names: ' + ', '.join(camera_names))
-        else:
-            self.camera_names = []
-
-        lapse_path = cfg_yaml.get('lapse_path')
-        if lapse_path:
-            self.lapse_path = lapse_path
-            logging.debug('ArloLapse.__init__(): Found lapse_path: ' + lapse_path)
-        else:
-            self.lapse_path = LAPSE_PATH
-
-        snapshot_path = cfg_yaml.get('snapshot_path')
-        if snapshot_path:
-            self.snapshot_path = snapshot_path
-            logging.debug('ArloLapse.__init__(): Found snapshot_path: ' + snapshot_path)
-        else:
-            self.snapshot_path = SNAPSHOT_PATH
-
-        purge_duration_hours = cfg_yaml.get('purge_duration_hours')
-        if purge_duration_hours:
-            self.purge_duration_hours = purge_duration_hours
-            logging.debug('ArloLapse.__init__(): Found purge_duration_hours: ' + purge_duration_hours)
-        else:
-            self.purge_duration_hours = PURGE_DURATION_HOURS
-
-        lapse_duration = cfg_yaml.get('lapse_duration')
-        if lapse_duration:
-            self.lapse_duration = lapse_duration
-            logging.debug('ArloLapse.__init__(): Found lapse_duration: ' + lapse_duration)
-        else:
-            self.lapse_duration = LAPSE_DURATION
+        self.camera_names = cfg_yaml.get('camera_names', [])
+        self.lapse_path = cfg_yaml.get('lapse_path', LAPSE_PATH)
+        self.snapshot_path = cfg_yaml.get('snapshot_path', SNAPSHOT_PATH)
+        self.purge_duration_hours = cfg_yaml.get('purge_duration_hours', PURGE_DURATION_HOURS)
+        self.lapse_duration = cfg_yaml.get('lapse_duration', LAPSE_DURATION)
 
 
     @timeout_decorator.timeout(60)
