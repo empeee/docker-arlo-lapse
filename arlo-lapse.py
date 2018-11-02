@@ -7,6 +7,7 @@ import imageio
 import timeout_decorator
 import yaml
 import logging
+import logging.handlers
 
 CONFIG_PATH = './cfg/'
 
@@ -15,7 +16,12 @@ SNAPSHOT_PATH = './raw/'
 PURGE_DURATION_HOURS = 24
 LAPSE_DURATION = 20
 
-logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s', level=logging.DEBUG) #, filename='arlo-lapse.log')
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
+HANDLER = logging.handlers.SysLogHandler('/dev/log')
+FORMATTER = logging.Formatter('%(levelname)s: %(module)s.%(funcName)s: %(message)s')
+HANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(HANDLER)
 
 class ArloLapse:
     """
@@ -37,7 +43,7 @@ class ArloLapse:
     def __init__(self):
         """ Constructor for ArloGIF class """
 
-        logging.info('ArloLapse.__init__(): Initializing...')
+        LOGGER.info('Initializing...')
 
         with open(CONFIG_PATH + 'config.yaml', 'r') as f:
             try:
@@ -86,7 +92,7 @@ class ArloLapse:
         If the camera list wasn't given, get all cameras from Arlo
         """
 
-        logging.info('ArloLapse.get_snapshots(): Getting snapshots...')
+        LOGGER.info('Getting snapshots...')
 
         try:
             arlo = Arlo(self.username, self.password)
@@ -103,24 +109,24 @@ class ArloLapse:
 
 
             if not self.camera_names:
-                logging.debug('ArloLapse.get_snapshots(): No camera names given, getting from Arlo')
+                LOGGER.debug('No camera names given, getting from Arlo')
                 self.camera_names = camera_names
             else:
-                logging.debug('ArloLapse.get_snapshots(): Checking if given camera names are in Arlo')
+                LOGGER.debug('Checking if given camera names are in Arlo')
                 self.camera_names = list(set(self.camera_names) & set(camera_names))
 
-            logging.debug('ArloLapse.get_snapshots(): Final list of cameras: ' + ', '.join(self.camera_names))
+            LOGGER.debug('Final list of cameras: ' + ', '.join(self.camera_names))
 
             for camera in cameras:
                 camera_name = camera['deviceName'].replace(' ', '_')
                 if camera_name in self.camera_names:
-                    logging.debug('ArloLapse.get_snapshots(): Getting snapshot for ' + camera_name)
+                    LOGGER.debug('Getting snapshot for ' + camera_name)
                     snapshot_file = self.snapshot_path + camera_name + '_' + now_str + '.jpg'
                     try:
                         snapshot_url = self.get_snapshot_url(arlo, basestations[0], camera)
                         arlo.DownloadSnapshot(snapshot_url,snapshot_file)
                     except timeout_decorator.TimeoutError:
-                        logging.warning('ArloLapse.get_snapshots(): Timeout ' + camera_name)
+                        LOGGER.warning('Timeout ' + camera_name)
 
         except Exception as e:
             print(e)
@@ -132,7 +138,7 @@ class ArloLapse:
         Pulls age of snapshot from filename.
         """
 
-        logging.info('ArloLapse.purge_snapshots(): Purging Snapshots...')
+        LOGGER.info('Purging Snapshots...')
         now = datetime.datetime.now()
 
         for camera_name in self.camera_names:
@@ -144,18 +150,18 @@ class ArloLapse:
                 match = re.search(regex, file)
                 date = datetime.datetime.strptime(match.group(2), '%Y%m%d%H%M%S')
                 if date < now - datetime.timedelta(hours=self.purge_duration_hours):
-                    logging.debug('ArloLapse.purge_snapshots(): Purging ' + file)
+                    LOGGER.debug('Purging ' + file)
                     os.remove(file)
 
     def make_lapse(self):
         """ Method to generate GIF from available snapshots. """
 
-        logging.info('ArloLapse.make_lapse(): Making Time Lapses...')
+        LOGGER.info('Making Time Lapses...')
 
         for camera_name in self.camera_names:
             files = sorted(glob.glob(self.snapshot_path + camera_name + '*.jpg'))
             num_files = len(files)
-            logging.debug('ArloLapse.make_lapse(): Found ' + str(num_files) + ' images for ' + camera_name)
+            LOGGER.debug('Found ' + str(num_files) + ' images for ' + camera_name)
 
             if num_files>0:
                 fps = num_files/self.lapse_duration
@@ -176,5 +182,5 @@ if __name__ =='__main__':
     arlo_gif.get_snapshots()
     arlo_gif.purge_snapshots()
     arlo_gif.make_lapse()
-    logging.info('ArloLapse: Script complete.')
+    LOGGER.info('Script complete.')
 
