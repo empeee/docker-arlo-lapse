@@ -9,7 +9,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install \
-    arlo==1.1.8 \
+    arlo==1.2.30 \
     imageio==2.4.1 \
     timeout_decorator==0.4.0 \
     pyyaml==3.13
