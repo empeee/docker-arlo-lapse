@@ -1,4 +1,4 @@
-from Arlo import Arlo
+from arlo import Arlo
 import datetime
 import glob
 import re
@@ -124,7 +124,10 @@ class ArloLapse:
                     snapshot_file = self.snapshot_path + camera_name + '_' + now_str + '.jpg'
                     try:
                         snapshot_url = self.get_snapshot_url(arlo, basestations[0], camera)
-                        arlo.DownloadSnapshot(snapshot_url,snapshot_file)
+                        if snapshot_url is None:
+                            LOGGER.warning('Returned None URL')
+                        else:
+                            arlo.DownloadSnapshot(snapshot_url,snapshot_file)
                     except timeout_decorator.TimeoutError:
                         LOGGER.warning('Timeout ' + camera_name)
 
