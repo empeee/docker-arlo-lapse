@@ -125,7 +125,7 @@ class ArloLapse:
                     try:
                         snapshot_url = self.get_snapshot_url(arlo, basestations[0], camera)
                         if snapshot_url is None:
-                            LOGGER.warning('Returned None URL')
+                            LOGGER.warning('Returned None URL for ' + camera_name)
                         else:
                             arlo.DownloadSnapshot(snapshot_url,snapshot_file)
                     except timeout_decorator.TimeoutError:
